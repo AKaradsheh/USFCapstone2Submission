@@ -1,0 +1,61 @@
+Column Name,Definition
+SEQN,Unique subject identifier
+mortstat,"Mortality status (1 = dead, 0 = alive)"
+causeavl,"Indicator if cause of death data is available (1 = yes, 0 = no)"
+permth_exm,Months from examination to follow-up time
+permth_int,Months from interview to follow-up time
+ucod_leading,"Underlying cause of death (ICD-10 code), or NA if alive"
+RIDAGEMN,Age in months at household screening interview
+RIDAGEEX,Age in months at MEC examination
+yr5_mort,"5-year mortality indicator (1 = died within 5 years, 0 = alive with >=5 years follow-up, NA if alive with <5 years follow-up)"
+Age,"Age in years, likely from RIDAGEYR"
+hyperten_mcod,"Indicator if hypertension is mentioned as any cause of death (1 = yes, 0 = no)"
+diabetes_mcod,"Indicator if diabetes is mentioned as any cause of death (1 = yes, 0 = no)"
+RIDAGEYR,Age in years at interview
+Race,Race/ethnicity category
+Gender,Gender (male/female)
+Diabetes,Indicator if the participant has diabetes
+CHF,Indicator if the participant has congestive heart failure
+CHD,Indicator if the participant has coronary heart disease
+Cancer,Indicator if the participant has cancer
+Stroke,Indicator if the participant has had a stroke
+MobilityProblem,Indicator if the participant has mobility problems
+DrinkStatus,Alcohol consumption status
+DrinksPerWeek,Number of drinks per week
+SmokeCigs,"Smoking status (never, former, current)"
+Weight_kg,Weight in kilograms
+Height_cm,Height in centimeters
+BMI,Body Mass Index (kg/m²)
+BMI_cat,"Category of BMI (normal, overweight, obese)"
+BMI_kgm2,Same as BMI
+WaistCircumference_cm,Waist circumference in centimeters
+UpperLegLength_cm,Upper leg length in centimeters
+CalfCircumference_cm,Calf circumference in centimeters
+UpperArmLength_cm,Upper arm length in centimeters
+ArmCircumference_cm,Arm circumference in centimeters
+ThighCircumference_cm,Thigh circumference in centimeters
+TricepsSkinfold_mm,Triceps skinfold thickness in millimeters
+SubscapularSkinfold_mm,Subscapular skinfold thickness in millimeters
+TAC,Total Activity Count from accelerometry
+TLAC,Total Log Activity Count from accelerometry
+WT,Wear Time from accelerometry
+ST,Sedentary Time from accelerometry
+MVPA,Minutes of Moderate-to-Vigorous Physical Activity from accelerometry
+SATP,Sedentary to Active Transition Probability from accelerometry
+ASTP,Active to Sedentary Transition Probability from accelerometry
+mi1,Mean score of the first principal component from FPCA of accelerometry data
+si1,Standard deviation of the first principal component from FPCA of accelerometry data
+mi2,Mean score of the second principal component from FPCA of accelerometry data
+si2,Standard deviation of the second principal component from FPCA of accelerometry data
+mi3,Mean score of the third principal component from FPCA of accelerometry data
+si3,Standard deviation of the third principal component from FPCA of accelerometry data
+mi4,Mean score of the fourth principal component from FPCA of accelerometry data
+si4,Standard deviation of the fourth principal component from FPCA of accelerometry data
+mi5,Mean score of the fifth principal component from FPCA of accelerometry data
+si5,Standard deviation of the fifth principal component from FPCA of accelerometry data
+mi6,Mean score of the sixth principal component from FPCA of accelerometry data
+si6,Standard deviation of the sixth principal component from FPCA of accelerometry data
+sPC1,Surrogate measure for principal component 1
+sPC5,Surrogate measure for principal component 5
+sPC6,Surrogate measure for principal component 6
+Exclude,"Flag for excluding certain participants from analysis (1 = exclude, 0 = include)"

@@ -1,0 +1,124 @@
+Section 2: Calculate commonly used accelerometry summary measures:
+##                 * TAC: Total activity counts
+##                 * TLAC: Total log(1+activity countss)
+##                 * WT: Total wear time
+##                 * ST: Total sedentary, sleep, or non-wear time
+##                 * MVPA: Total time spent in MVPA
+##                 * SATP: Transition probability from sedentary, sleep, or non-wear to active. In the manuscript this is referred to
+##                         using the subscript sl/nw
+##                 * ASTP: Transition probability from active to sedentary, sleep, or non-wear. In the manuscript this is referred to
+##                         using the subscript sl/nw
+##               Note that in this section these variables are calculated at the day level. After applying exlcusion criteria
+##               in Section 3, we average across days within individuals to get one number per measure for each participant.
+##               The exclusion criteria involves excluding days which are deemed to have insufficient wear-time (<10 hours)
+
+ind_vars <- c("Age", "Gender", "Race", "EducationAdult", "SmokeCigs", "DrinkStatus", "BMI_cat",
+              "Diabetes","CHF",  "CHD", "Stroke", "Cancer", "MobilityProblem",
+              "sPC1", #"sPC5",
+              "sPC6", "ST", "WT", "MVPA","TAC", "TLAC", "SATP", "ASTP")
+
+
+## standardize continuous predictors other than age
+## so coefficients are interpretable as
+## "a one standard deviation change in ... is associated with ... (in/de)crease in log odds of 5-year mortality"
+vars_std <- c("sPC1", "sPC5", "sPC6", "ST", "WT", "MVPA","TAC", "TLAC", "SATP", "ASTP")
+for(i in vars_std){
+    data_analysis[[i]] <- data_analysis[[i]]/sd(data_analysis[[i]])
+
+## verify there's no missingness in the rest of our predictors of interest
+vars_interest <- c("Age", "Gender", "Race", "EducationAdult", "SmokeCigs", "DrinkStatus", "BMI_cat",
+                   "Diabetes","CHF",  "CHD", "Stroke",
+                   "Cancer", "MobilityProblem",
+                   "permth_exm")
+summary(data_analysis[,c(vars_interest,act_var_nms,"mortstat")])
+
+## clean up the workspace
+rm(list=c("AllAct","AllFlags","i","criteria_vec","nms_rm","tab_miss"))
+gc()
+
+## variables to consider as linear predictors of 5-year mortality
+ind_vars <- c("Age", "Gender", "Race", "EducationAdult", "SmokeCigs", "DrinkStatus", "BMI_cat",
+              "Diabetes","CHF",  "CHD", "Stroke", "Cancer", "MobilityProblem",
+              "sPC1", #"sPC5",
+              "sPC6", "ST", "WT", "MVPA","TAC", "TLAC", "SATP", "ASTP")
+
+## examine distrubtion of predictor variables
+summary(data_analysis[,ind_vars])
+
+
+## re-name some factors to be interpretable
+rownames(tabAsMatrix_both) <- gsub("DrinkStatus", "Alcohol consumption", rownames(tabAsMatrix_both))
+rownames(tabAsMatrix_both) <- gsub("SmokeCigs", "Cigarette smoking", rownames(tabAsMatrix_both))
+rownames(tabAsMatrix_both) <- gsub("EducationAdult", "Education", rownames(tabAsMatrix_both))
+rownames(tabAsMatrix_both) <- gsub("BMI_cat", "Body mass index", rownames(tabAsMatrix_both))
+rownames(tabAsMatrix_both) <- gsub("CHD", "Coronary heart disease", rownames(tabAsMatrix_both))
+rownames(tabAsMatrix_both) <- gsub("CHF", "Congestive heart failure", rownames(tabAsMatrix_both))
+rownames(tabAsMatrix_both) <- gsub("MobilityProblem = Any Difficulty \\(%\\)", "Mobility problem (% Any Difficulty)", rownames(tabAsMatrix_both))
+rownames(tabAsMatrix_both) <- gsub("permth_exm", "Months mortality follow-up", rownames(tabAsMatrix_both))
+rownames(tabAsMatrix_both) <- gsub("mortstat_fac = Dead \\(%\\)", "Mortality at follow-up (% Dead)", rownames(tabAsMatrix_both))
+rownames(tabAsMatrix_both) <- gsub("= Female \\(%\\)", "(% Female)", rownames(tabAsMatrix_both))
+rownames(tabAsMatrix_both) <- gsub("= Yes \\(%\\)", "(% Yes)", rownames(tabAsMatrix_both))
+
+## replace variable names with meningful names
+auc_full <- gsub("DrinkStatus", "Alcohol consumption", auc_full)
+auc_full <- gsub("^ST", "Sedentary, Sleep, or Non-wear", auc_full)
+auc_full <- gsub("WT", "Wear time", auc_full)
+auc_full <- gsub("EducationAdult", "Education", auc_full)
+auc_full <- gsub("BMI_cat", "Body mass index", auc_full)
+auc_full <- gsub("MobilityProblem", "Mobility problem", auc_full)
+auc_full <- gsub("SmokeCigs", "Cigarette smoking", auc_full)
+auc_full <- gsub("CHD", "Coronary heart disease", auc_full)
+auc_full <- gsub("CHF", "Congestive heart failure", auc_full)
+auc_full <- gsub("sPC6", "Surrogate for $s_{i6}$", auc_full)
+auc_full <- gsub("sPC5", "Surrogate for $s_{i5}$", auc_full)
+auc_full <- gsub("sPC1", "Surrogate for $s_{i1}$", auc_full)
+auc_full <- gsub("ASTP", "ASTP$_{sl/nw}$", auc_full)
+auc_full <- gsub("SATP", "SATP$_{sl/nw}$", auc_full)
+
+<p>A data frame with 10122 rows and 23 variables with one row per participant in the 2003-2004 wave.</p><ul>
+<li><p>SEQN: Unique subject identifier</p></li>
+<li><p>SDDSRVYR: Numeric variable denoting NHANES wave. SDDSRVYR = 3 correpsonds to the 2003-2004 wave</p></li>
+<li><p>SDMVPSU: Masked variance pseudo probability sampling units. Used for variance estimation.</p></li>
+<li><p>SDMVSTRA: Masked variance pseudo stratum. Used for variance estimation.</p></li>
+<li><p>WTINT2YR: Full sample interview weight.</p></li>
+<li><p>WTMEC2YR: Full sample examinatin weight.</p></li>
+<li><p>RIDAGEMN: Age in months at date of screening for individuals under the age of 85. Participants 85 and over are coded as NA.</p></li>
+<li><p>RIDAGEEX: Age in months at examination (MEC) for individuals under the age of 85. Participants 85 and over are coded as NA.</p></li>
+<li><p>RIDAGEYR: "Best" age in years at date of screening for individuals under the age of 85. Participants 85 and over are coded as 85. This variable is used when
+   determining thresholds for questions using age inclusion/exclusion criteria</p></li>
+<li><p>BMI: Body mass index (kg/m^2). This variable is a copy of the "BMXBMI" variable in the "Body Measures" data.</p></li>
+<li><p>BMI_cat: Body mass index categorized into: underweight (&lt;= 18.5), normal (&gt; 18.5, &lt;= 25), overweight (&gt; 25, &lt;= 30), and obese (&gt; 30).</p></li>
+<li><p>Race: Self reported ethnicity categorized into five levels: Mexican American, Other Hispanic, (Non-Hispanic) White, (Non-Hispanic) Black, and Other. This is a factor version of the variable "RIDRETH1" in the "Demographic Variables &amp; Sample Weights" data.</p></li>
+<li><p>Gender: Self reported gender categorized into Male and Female. This is a factor version of the variable "RIAGENDR" in the "Demographic Variables &amp; Sample Weights" data.</p></li>
+<li><p>Diabetes: Self reported doctor diagnosed diabetes (excluding gestational diabetes) categorized into: Yes, No, Borderline, Refused, Don't know. This is a factor version of the variable DIQ010 in the  "Diabetes" data.</p></li>
+<li><p>CHF: Self reported medical professional diagnosed  congestive heart failure categorized into: Yes, No,  Refused, Don't know. This is a factor version of the variable MCQ160B in the  "Medical Conditions" data.</p></li>
+<li><p>CHD: Self reported medical professional diagnosed  coronary heart disease categorized into: Yes, No,  Refused, Don't know. This is a factor version of the variable MCQ160C in the  "Medical Conditions" data.</p></li>
+<li><p>Cancer: Self reported medical professional diagnosed history of any kind of cancer categorized into: Yes, No, Refused, Don't know. This is a factor version of the variable MCQ220 in the  "Medical Conditions" data.</p></li>
+<li><p>Stroke: Self reported medical professional diagnosed history of stroke categorized into: Yes, No, Refused, Don't know. This is a factor version of the variable MCQ160F in the  "Medical Conditions" data.</p></li>
+<li><p>MobilityProblem: Self reported mobility problem categorized into: No difficulty and Any difficulty.
+   This variable is derived from the responses to questions: PFQ049, PFQ054, PFQ057, PFQ059, PFQ061B, and PFQ061C in the "Physical Functioning" data.
+   If individuals reported any difficulty climbing up 10 stairs (PFQ061B) or walking a quarter mile (PFQ061C), they were classified as "Any difficulty" for this variable.
+   If individuals reported that they did not perform either of these activities they were classified as "Any difficulty".
+   If individuals reported that they required special equipment to walk, they were not asked PFQ061B/PFQ061C and were considered "Any difficulty" for this variable.
+   Any indivdual who was 59 or younger and responded "No difficulty" to higher level physical functioning questions were not asked PFQ061B/PFQ061C and were considered "No difficulty" for this variable.</p></li>
+<li><p>DrinkStatus: Current alcohol consumption status categorized into: Non-drinker, Moderate drinker, Heavy drinker. This variable is derived from several questionairre responses in the "Alcohol Use" data.
+   Non-drinkers are identified as those individuals who either 1) responded "No" to whether they have had "at least 12 alcoholic drinks" in any one year,
+   or over the course of their life (ALQ101, ALQ110); or 2) responded that they have had 0 drinks over the last 12 months (ALQ120Q).
+   Moderate and heavy drinkers were identified using the CDC's gender specific thresholds of no more than 7 and 14 drinks per week for women and men, respectively.
+   Drinks per week was calcualted using the data from questions ALQ120Q, ALQ120U, and ALQ130.
+   Notes: 1) The number of drinks per week has some notable outliers. It may be that there was miscoding of the units (ALQ 120U) for some individuals' responses. We do not attempt any correction here.
+   2) Heavy drinking here does not incorporate and information on binge drinking;
+   3) This data is only publicly available for participants 20+ years old at the time of interview; and
+   4) Any answer of "refused" or "don't know" was considered missing for ALQ101, ALQ110, ALQ120Q, ALQ120U, ALQ130.</p></li>
+<li><p>DrinksPerWeek: Self reported number of drinks per week based on responses to questions ALQ120Q, ALQ120U, and ALQ130.
+   Individuals who responded "No" to to whether they have had "at least 12 alcoholic drinks" in any one year,
+   or over the course of their life (ALQ101, ALQ110) were classified as 0 drinks per week.</p></li>
+<li><p>SmokeCigs: Self reported cigarette smoking status categorized into: Never, Former, and Current.
+   This variable is derived from responses to questions SMQ020 and SMQ040 in the "Smoking - Cigarette/Tobacco Use - Adult" data.
+   We consider anyone who responds "No" to the question of whether they have ever smoked 100 cigarettes in their life (SMQ020) to be "Never" smokers.
+   Former smokers are those individuals who respond "Yes" to having ever smoked 100 cigarettes in their life, but currently smoke "Not at all" (SMQ040).
+   Current smokers are those individuals who both respond "Yes" to having ever smoked 100 cigarettes in their life and currently smoke either "Every day", or "Some days" (SMQ040).
+   Note: 1) Any answer of "refused" or "don't know" was considered missing; and
+   2) This data is only publicly available for participants 20+ years old at the time of interview.</p></li>
+</ul>
+

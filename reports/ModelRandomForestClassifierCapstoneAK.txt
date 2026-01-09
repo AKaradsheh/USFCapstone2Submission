@@ -1,0 +1,31 @@
+Model	RandomForestClassifier	n_estimators=200	max_depth=20	max_features=sqrt	class_weight=balanced
+SMOTE	Yes				
+					
+Parameters	n_estimators=200,max_depth=20,max_features=sqrt,class_weight=balanced				
+Hyperparameters	random_state=42				
+Accuracy	0.8				
+Class_0_Precision  (Alive)	0.87				
+Class_0_Recall  (Alive)	0.91				
+Class_0_F1 (Alive)	0.88				
+Class_1_Precision (Deceased)	0.38				
+Class_1_Recall (Deceased)	0.39				
+Class_1_F1 (Deceased)	0.38				
+Confusion_Matrix_TN_FP_FN_TP	490,50,77,39				
+Cross_Validation_F1_Score	0.20 ± 0.06				
+					
+					
+Features					
+Feature					
+Age					
+TAC					
+WHtR_calculated					
+OSA_Probability					
+LogCRP_mg_dL					
+Lactate_dehydrogenase_LDH_U_L					
+Triglycerides_mg_dL					
+Uric_acid_mg_dL					
+Creatinine_mg_dL					
+Age_Group					
+BMI_cat					
+Race					
+HTN_Category_Measured					
